@@ -1,0 +1,41 @@
+import io.appium.java_client.AppiumDriver;
+import io.appium.java_client.MobileElement;
+import io.appium.java_client.android.AndroidDriver;
+import org.openqa.selenium.remote.DesiredCapabilities;
+
+import java.net.URL;
+import java.net.MalformedURLException;
+
+public class AppiumTest {
+    public static void main(String[] args) {
+        AppiumDriver<MobileElement> driver;
+
+        DesiredCapabilities caps = new DesiredCapabilities();
+        caps.setCapability("deviceName", "emulator-5554");
+        caps.setCapability("platformName", "Android");
+        caps.setCapability("platformVersion", "11.0");
+        caps.setCapability("appPackage", "com.android.calculator2");
+        caps.setCapability("appActivity", "com.android.calculator2.Calculator");
+        caps.setCapability("noReset", "true");
+
+        try {
+            // Connect to Appium Server
+            driver = new AndroidDriver<MobileElement>(new URL("http://127.0.0.1:4723/wd/hub"), caps);
+
+            // Perform actions (e.g., 2 + 3)
+            driver.findElementById("com.android.calculator2:id/digit_2").click();
+            driver.findElementById("com.android.calculator2:id/op_add").click();
+            driver.findElementById("com.android.calculator2:id/digit_3").click();
+            driver.findElementById("com.android.calculator2:id/eq").click();
+
+            // Get the result
+            String result = driver.findElementById("com.android.calculator2:id/result").getText();
+            System.out.println("Result is: " + result);
+
+            // Close the app
+            driver.quit();
+        } catch (MalformedURLException e) {
+            System.out.println("Invalid Appium Server URL");
+        }
+    }
+}
